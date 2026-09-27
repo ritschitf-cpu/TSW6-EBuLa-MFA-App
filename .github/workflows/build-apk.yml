@@ -13,6 +13,19 @@ jobs:
           flutter-version: '3.35.0'
           channel: stable
           cache: true
+      - name: Generate Android host files
+        run: |
+          rm -rf android
+          flutter create --platforms=android --org com.tsw6 .
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("android/app/src/main/AndroidManifest.xml")
+          s=p.read_text()
+          s=s.replace("<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">",
+                      "<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <uses-permission android:name=\"android.permission.INTERNET\" />")
+          s=s.replace('<application ', '<application android:usesCleartextTraffic="true" ')
+          p.write_text(s)
+          PY
       - run: flutter pub get
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
