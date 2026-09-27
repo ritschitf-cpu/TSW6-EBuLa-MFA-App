@@ -12,6 +12,7 @@ void main() async {
 }
 class TswApp extends StatelessWidget {
   const TswApp({super.key});
+  @override
   Widget build(BuildContext context) => MaterialApp(debugShowCheckedModeBanner:false, theme:ThemeData.dark(useMaterial3:true), home:const Dashboard());
 }
 class Dashboard extends StatefulWidget {
