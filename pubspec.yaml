@@ -1,0 +1,17 @@
+name: tsw6_ebula_mfa
+description: External EBuLa and MFA display for Train Sim World 6.
+publish_to: "none"
+version: 0.1.0+1
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  web_socket_channel: ^3.0.1
+  shared_preferences: ^2.3.2
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+flutter:
+  uses-material-design: true
