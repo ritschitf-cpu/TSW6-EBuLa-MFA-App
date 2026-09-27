@@ -1,34 +1,95 @@
 name: Build Android APK
+
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.0'
           channel: stable
           cache: true
-      - name: Generate Android host files
+
+      # The repository intentionally keeps the Android host reproducible.
+      # Flutter regenerates it here so old Android V1 embedding files cannot
+      # accidentally re-enter the build.
+      - name: Generate Android host
         run: |
           rm -rf android
           flutter create --platforms=android --org com.tsw6 .
+
+      - name: Configure Android networking
+        run: |
           python3 - <<'PY'
           from pathlib import Path
-          p=Path("android/app/src/main/AndroidManifest.xml")
-          s=p.read_text()
-          s=s.replace("<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">",
-                      "<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">\n    <uses-permission android:name=\"android.permission.INTERNET\" />")
-          s=s.replace('<application ', '<application android:usesCleartextTraffic="true" ')
+          p = Path("android/app/src/main/AndroidManifest.xml")
+          s = p.read_text()
+          s = s.replace(
+              '<manifest xmlns:android="http://schemas.android.com/apk/res/android">',
+              '<manifest xmlns:android="http://schemas.android.com/apk/res/android">\n'
+              '    <uses-permission android:name="android.permission.INTERNET" />'
+          )
+          s = s.replace(
+              '<application ',
+              '<application android:usesCleartextTraffic="true" '
+          )
           p.write_text(s)
           PY
-      - run: flutter pub get
-      - run: flutter build apk --release
-      - uses: actions/upload-artifact@v4
+
+      # A release APK is normally unsigned when no release signing config is
+      # supplied. That APK can be built successfully but Android may reject
+      # installation. For this test distribution we deliberately use Flutter's
+      # generated debug keystore to sign the release variant.
+      - name: Sign release build with test key
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("android/app/build.gradle.kts")
+          s = p.read_text()
+          marker = '    buildTypes {'
+          if marker not in s:
+              raise SystemExit("Could not find Android buildTypes block")
+          old = marker + '\n'
+          new = marker + '\n' + '        getByName("release") {\n            signingConfig = signingConfigs.getByName("debug")\n        }\n'
+          s = s.replace(old, new, 1)
+          p.write_text(s)
+          PY
+          grep -n -A5 -B2 'getByName("release")' android/app/build.gradle.kts
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed lib test 2>/dev/null || dart format --output=none --set-exit-if-changed lib
+
+      - name: Static analysis
+        run: flutter analyze
+
+      - name: Build signed universal APK
+        run: flutter build apk --release
+
+      - name: Verify APK is installable/signed
+        run: |
+          APK="build/app/outputs/flutter-apk/app-release.apk"
+          test -s "$APK"
+          SDK_BUILD_TOOLS=$(find "$ANDROID_HOME/build-tools" -maxdepth 1 -mindepth 1 -type d | sort -V | tail -1)
+          "$SDK_BUILD_TOOLS/apksigner" verify --verbose "$APK"
+          "$ANDROID_HOME/platform-tools/adb" version
+          "$SDK_BUILD_TOOLS/aapt" dump badging "$APK" | grep -E "package: name=|sdkVersion:|targetSdkVersion:"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: tsw6-ebula-mfa-apk
           path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 90
