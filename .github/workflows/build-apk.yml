@@ -26,6 +26,7 @@ jobs:
         run: |
           rm -rf android
           flutter create --platforms=android --org com.tsw6 .
+          rm -rf test
 
       - name: Configure Android networking
         run: |
