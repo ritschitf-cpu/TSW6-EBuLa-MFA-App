@@ -1,0 +1,1 @@
+Automated build trigger. The workflow generates the Android host scaffold and builds the release APK.
