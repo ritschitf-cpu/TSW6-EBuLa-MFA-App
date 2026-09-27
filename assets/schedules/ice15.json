@@ -1,0 +1,25 @@
+{
+  "train": "ICE15",
+  "origin": "ICE Frankfurt(Main) Hbf",
+  "destination": "Köln Hbf",
+  "date": "28.09.2020",
+  "nextStop": "Köln Hbf",
+  "maxSpeed": 160,
+  "rows": [
+    {"km": 11.3, "text": "Sbk 34024"},
+    {"km": 12.5, "text": "Sbk 32026"},
+    {"km": 13.8, "text": "", "symbol": "LZB"},
+    {"km": 14.6, "text": "Sbk 32028"},
+    {"km": 15.9, "text": "Sbk 32030"},
+    {"km": 16.9, "text": ""},
+    {"km": 17.0, "text": "", "symbol": "¥"},
+    {"km": 17.8, "text": ""},
+    {"km": 18.2, "text": "Asig"},
+    {"km": 18.7, "text": "Horrem"},
+    {"km": 19.6, "text": "Esig"},
+    {"km": 21.1, "text": "Sbk 32062"},
+    {"km": 22.6, "text": "Sindorf Awanst", "time": "12:02.5"},
+    {"km": 22.8, "text": "Sbk 30064"},
+    {"km": 23.9, "text": "Sbk 30066", "time": "12:04.2"}
+  ]
+}
