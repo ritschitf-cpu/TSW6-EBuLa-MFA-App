@@ -17,6 +17,7 @@ class TswApp extends StatelessWidget {
 }
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
+  @override
   State<Dashboard> createState()=>_DashboardState();
 }
 class _DashboardState extends State<Dashboard> {
@@ -50,6 +51,7 @@ class _DashboardState extends State<Dashboard> {
     final h=TextEditingController(text:host), p=TextEditingController(text:port);
     return AlertDialog(title:const Text('TSW6 Bridge'),content:Column(mainAxisSize:MainAxisSize.min,children:[TextField(controller:h,decoration:const InputDecoration(labelText:'PC-IP')),TextField(controller:p,decoration:const InputDecoration(labelText:'Port'))]),actions:[TextButton(onPressed:()=>Navigator.pop(context),child:const Text('Abbrechen')),FilledButton(onPressed:(){host=h.text.trim();port=p.text.trim();Navigator.pop(context);connect();},child:const Text('Verbinden'))]);
   }
+  @override
   Widget build(BuildContext context)=>Scaffold(
     backgroundColor:Colors.black,
     body:SafeArea(child:Row(children:[
@@ -64,5 +66,6 @@ class _DashboardState extends State<Dashboard> {
     ])),
     floatingActionButton:FloatingActionButton.extended(onPressed:()=>showDialog(context:context,builder:(_)=>settings()),label:Text(connected?'Verbunden':'Verbinden'),icon:Icon(connected?Icons.link:Icons.link_off))
   );
+  @override
   void dispose(){sub?.cancel();channel?.sink.close();super.dispose();}
 }
