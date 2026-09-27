@@ -286,9 +286,9 @@ class _ProfilePainter extends CustomPainter {
   @override void paint(Canvas c, Size s) {
     final p = Paint()..color = fg..strokeWidth = 2..style = PaintingStyle.stroke;
     final x = s.width * .52;
-    c.drawLine(x, 0, x, s.height, p);
-    c.drawLine(x - 60, 0, x - 60, s.height, p);
-    c.drawLine(x + 60, 0, x + 60, s.height, p);
+    c.drawLine(Offset(x, 0), Offset(x, s.height), p);
+    c.drawLine(Offset(x - 60, 0), Offset(x - 60, s.height), p);
+    c.drawLine(Offset(x + 60, 0), Offset(x + 60, s.height), p);
     final d = Path()..moveTo(x, s.height * .45 - 14)..lineTo(x + 14, s.height * .45)
       ..lineTo(x, s.height * .45 + 14)..lineTo(x - 14, s.height * .45)..close();
     c.drawPath(d, Paint()..color = fg);
