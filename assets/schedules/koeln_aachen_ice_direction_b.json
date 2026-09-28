@@ -1,0 +1,101 @@
+{
+  "id": "koeln_aachen_ice_direction_b.json",
+  "train": "ICE 16",
+  "origin": "Aachen Hbf",
+  "destination": "Köln Hbf",
+  "date": "TSW6 / EBuLa",
+  "route": "Köln–Aachen",
+  "maxSpeed": 160,
+  "rows": [
+    {
+      "km": 94.5,
+      "text": "Aachen Hbf",
+      "time": "10:02",
+      "symbol": "H"
+    },
+    {
+      "km": 90,
+      "text": "Aachen Rothe Erde",
+      "time": "10:06",
+      "symbol": ""
+    },
+    {
+      "km": 86.3,
+      "text": "Eilendorf",
+      "time": "10:09",
+      "symbol": ""
+    },
+    {
+      "km": 80.5,
+      "text": "Stolberg Hbf",
+      "time": "10:15",
+      "symbol": "H"
+    },
+    {
+      "km": 74.8,
+      "text": "Eschweiler Hbf",
+      "time": "10:20",
+      "symbol": "H"
+    },
+    {
+      "km": 67.2,
+      "text": "Langerwehe",
+      "time": "10:26",
+      "symbol": ""
+    },
+    {
+      "km": 58.4,
+      "text": "Düren",
+      "time": "10:34",
+      "symbol": "H"
+    },
+    {
+      "km": 48.9,
+      "text": "Buir",
+      "time": "10:43",
+      "symbol": ""
+    },
+    {
+      "km": 39.8,
+      "text": "Sindorf",
+      "time": "10:49",
+      "symbol": ""
+    },
+    {
+      "km": 31.5,
+      "text": "Horrem",
+      "time": "10:54",
+      "symbol": "H"
+    },
+    {
+      "km": 24.4,
+      "text": "Frechen-Königsdorf",
+      "time": "11:00",
+      "symbol": ""
+    },
+    {
+      "km": 16.2,
+      "text": "Lövenich",
+      "time": "11:06",
+      "symbol": ""
+    },
+    {
+      "km": 8.1,
+      "text": "Köln-Ehrenfeld",
+      "time": "11:12",
+      "symbol": "H"
+    },
+    {
+      "km": 1.8,
+      "text": "Köln Messe/Deutz",
+      "time": "11:19",
+      "symbol": "H"
+    },
+    {
+      "km": 0,
+      "text": "Köln Hbf",
+      "time": "11:23",
+      "symbol": "H"
+    }
+  ]
+}
