@@ -1,0 +1,89 @@
+{
+  "id": "frankfurt_fulda_ice_a.json",
+  "train": "ICE 575",
+  "origin": "Frankfurt (Main) Hbf",
+  "destination": "Fulda",
+  "date": "TSW6 / EBuLa",
+  "route": "Kinzigtalbahn",
+  "maxSpeed": 160,
+  "rows": [
+    {
+      "km": 0,
+      "text": "Frankfurt (Main) Hbf",
+      "time": "13:04",
+      "symbol": "H"
+    },
+    {
+      "km": 6.2,
+      "text": "Frankfurt Süd",
+      "time": "13:10",
+      "symbol": ""
+    },
+    {
+      "km": 14.8,
+      "text": "Offenbach",
+      "time": "13:16",
+      "symbol": ""
+    },
+    {
+      "km": 24.9,
+      "text": "Hanau Hbf",
+      "time": "13:25",
+      "symbol": "H"
+    },
+    {
+      "km": 34.2,
+      "text": "Wolfgang",
+      "time": "13:32",
+      "symbol": ""
+    },
+    {
+      "km": 42.8,
+      "text": "Langenselbold",
+      "time": "13:40",
+      "symbol": ""
+    },
+    {
+      "km": 51.4,
+      "text": "Gelnhausen",
+      "time": "13:48",
+      "symbol": "H"
+    },
+    {
+      "km": 62.1,
+      "text": "Wächtersbach",
+      "time": "13:58",
+      "symbol": ""
+    },
+    {
+      "km": 73.6,
+      "text": "Bad Soden-Salmünster",
+      "time": "14:07",
+      "symbol": ""
+    },
+    {
+      "km": 84,
+      "text": "Schlüchtern",
+      "time": "14:16",
+      "symbol": "H"
+    },
+    {
+      "km": 96.7,
+      "text": "Flieden",
+      "time": "14:26",
+      "symbol": ""
+    },
+    {
+      "km": 109.4,
+      "text": "Neuhof",
+      "time": "14:35",
+      "symbol": ""
+    },
+    {
+      "km": 119.2,
+      "text": "Fulda Hbf",
+      "time": "14:43",
+      "symbol": "H"
+    }
+  ]
+}
