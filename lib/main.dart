@@ -31,19 +31,26 @@ class Schedule {
     required this.date, required this.nextStop, required this.maxSpeed, required this.rows});
   factory Schedule.fromJson(Map<String, dynamic> j) => Schedule(
     train: j['train'], origin: j['origin'], destination: j['destination'],
-    date: j['date'], nextStop: j['nextStop'], maxSpeed: (j['maxSpeed'] as num).toDouble(),
+    date: j['date'], nextStop: j['nextStop'] ?? '', maxSpeed: (j['maxSpeed'] as num?)?.toDouble() ?? 160,
     rows: (j['rows'] as List).map((e) => RowData.fromJson(e)).toList(),
   );
 }
 
 class Telemetry {
   final bool connected;
-  final double speedKmh;
+  final double speedKmh, speedLimitKmh, gradient;
   final DateTime? simulationTime;
-  const Telemetry({this.connected = false, this.speedKmh = 0, this.simulationTime});
+  final double? latitude, longitude;
+  final String loco;
+  const Telemetry({this.connected = false, this.speedKmh = 0, this.speedLimitKmh = 0, this.gradient = 0, this.simulationTime, this.latitude, this.longitude, this.loco = ''});
   factory Telemetry.fromJson(Map<String, dynamic> j) => Telemetry(
     connected: j['connected'] == true,
     speedKmh: (j['speedKmh'] ?? 0).toDouble(),
+    speedLimitKmh: (j['speedLimitKmh'] ?? 0).toDouble(),
+    gradient: (j['gradient'] ?? 0).toDouble(),
+    latitude: (j['latitude'] as num?)?.toDouble(),
+    longitude: (j['longitude'] as num?)?.toDouble(),
+    loco: j['loco'] ?? '',
     simulationTime: j['simulationTime'] == null ? null : DateTime.tryParse(j['simulationTime']),
   );
 }
@@ -80,11 +87,14 @@ class _EbulaAppState extends State<EbulaApp> {
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
     pcHost = prefs.getString('pcHost') ?? '192.168.178.20';
-    final raw = await rootBundle.loadString('assets/schedules/ice15.json');
     final p = await SharedPreferences.getInstance();
+    final names = ['ice15.json','koeln_aachen_ice_direction_a.json','koeln_aachen_ice_direction_b.json','bremen_oldenburg_regio_a.json','bremen_oldenburg_regio_b.json','frankfurt_fulda_ice_a.json','frankfurt_fulda_ice_b.json','dresden_leipzig_ic_a.json','dresden_leipzig_ic_b.json'];
+    final loaded = <Schedule>[];
+    for (final n in names) { try { loaded.add(Schedule.fromJson(jsonDecode(await rootBundle.loadString('assets/schedules/$n')))); } catch (_) {} }
+    final raw = await rootBundle.loadString('assets/schedules/ice15.json');
     if (!mounted) return;
     setState(() {
-      schedule = Schedule.fromJson(jsonDecode(raw));
+      schedule = loaded.isNotEmpty ? loaded.first : Schedule.fromJson(jsonDecode(raw));
       night = p.getBool('night') ?? false;
       dark = p.getBool('dark') ?? true;
       brightness = p.getDouble('brightness') ?? 1;
