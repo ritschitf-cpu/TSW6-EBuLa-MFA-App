@@ -1,0 +1,83 @@
+{
+  "id": "bremen_oldenburg_regio_a.json",
+  "train": "RE 1",
+  "origin": "Bremen Hbf",
+  "destination": "Oldenburg (Oldb) Hbf",
+  "date": "TSW6 / EBuLa",
+  "route": "Bremen–Oldenburg",
+  "maxSpeed": 160,
+  "rows": [
+    {
+      "km": 0,
+      "text": "Bremen Hbf",
+      "time": "09:12",
+      "symbol": "H"
+    },
+    {
+      "km": 5.6,
+      "text": "Bremen-Walle",
+      "time": "09:17",
+      "symbol": ""
+    },
+    {
+      "km": 9.4,
+      "text": "Bremen-Oslebshausen",
+      "time": "09:21",
+      "symbol": ""
+    },
+    {
+      "km": 13.1,
+      "text": "Bremen-Burg",
+      "time": "09:25",
+      "symbol": "H"
+    },
+    {
+      "km": 22.7,
+      "text": "Schwanewede",
+      "time": "09:34",
+      "symbol": ""
+    },
+    {
+      "km": 29.6,
+      "text": "Hude",
+      "time": "09:42",
+      "symbol": "H"
+    },
+    {
+      "km": 38.4,
+      "text": "Bookholzberg",
+      "time": "09:50",
+      "symbol": ""
+    },
+    {
+      "km": 45,
+      "text": "Delmenhorst",
+      "time": "09:57",
+      "symbol": "H"
+    },
+    {
+      "km": 54.2,
+      "text": "Heidkrug",
+      "time": "10:05",
+      "symbol": ""
+    },
+    {
+      "km": 62.7,
+      "text": "Sandkrug",
+      "time": "10:12",
+      "symbol": ""
+    },
+    {
+      "km": 70.9,
+      "text": "Oldenburg-Wechloy",
+      "time": "10:19",
+      "symbol": ""
+    },
+    {
+      "km": 74.8,
+      "text": "Oldenburg (Oldb) Hbf",
+      "time": "10:23",
+      "symbol": "H"
+    }
+  ]
+}
