@@ -196,7 +196,7 @@ class _EbulaAppState extends State<EbulaApp> {
         padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
         child: _key(l, night, () {
           if (l == '1') _info();
-          if (l == '2') setState(() => timeMode = !timeMode);
+          if (l == '2') _showSchedules();
           if (l == '3') setState(() => page = 0);
           if (l == '4') _adjust(1, 0);
           if (l == '5') _adjust(-1, 0);
@@ -282,6 +282,21 @@ class _EbulaAppState extends State<EbulaApp> {
       style: TextStyle(color: fg, fontSize: 20, fontWeight: FontWeight.w700))));
   Widget _status(String text, Color fg) => Expanded(
     child: Center(child: Text(text, style: TextStyle(color: fg, fontSize: 15, fontWeight: FontWeight.bold))));
+
+  void _showSchedules() {
+    showDialog(context: context, builder: (_) => AlertDialog(
+      backgroundColor: Colors.black,
+      title: const Text('Zug / Fahrplan', style: TextStyle(color: Colors.white)),
+      content: SizedBox(width: 650, height: 420, child: ListView(children: [
+        for (final s in availableSchedules) ListTile(
+          title: Text('\${s.train}  \${s.origin} → \${s.destination}', style: const TextStyle(color: Colors.white)),
+          subtitle: Text('\${s.route} • \${s.rows.length} Datenpunkte', style: const TextStyle(color: Colors.grey)),
+          onTap: () { setState(() { schedule = s; page = 0; }); Navigator.pop(context); },
+        )
+      ])),
+      actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('C'))],
+    ));
+  }
 
   void _settings() {
     final c = TextEditingController(text: pcHost);
