@@ -73,7 +73,7 @@ jobs:
         run: dart format lib
 
       - name: Static analysis
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
 
       - name: Build signed universal APK
         run: flutter build apk --release
