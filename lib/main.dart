@@ -62,6 +62,7 @@ class EbulaApp extends StatefulWidget {
 
 class _EbulaAppState extends State<EbulaApp> {
   Schedule? schedule;
+  final List<Schedule> availableSchedules = [];
   String pcHost = '192.168.178.20';
   Telemetry telemetry = const Telemetry();
   Timer? timer;
@@ -94,6 +95,7 @@ class _EbulaAppState extends State<EbulaApp> {
     final raw = await rootBundle.loadString('assets/schedules/ice15.json');
     if (!mounted) return;
     setState(() {
+      availableSchedules..clear()..addAll(loaded);
       schedule = loaded.isNotEmpty ? loaded.first : Schedule.fromJson(jsonDecode(raw));
       night = p.getBool('night') ?? false;
       dark = p.getBool('dark') ?? true;
