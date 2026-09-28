@@ -1,0 +1,83 @@
+{
+  "id": "dresden_leipzig_ic_b.json",
+  "train": "IC 2046",
+  "origin": "Leipzig Hbf",
+  "destination": "Dresden Hbf",
+  "date": "TSW6 / EBuLa",
+  "route": "Dresden–Leipzig",
+  "maxSpeed": 160,
+  "rows": [
+    {
+      "km": 123.9,
+      "text": "Leipzig Hbf",
+      "time": "18:02",
+      "symbol": "H"
+    },
+    {
+      "km": 108.7,
+      "text": "Wurzen",
+      "time": "18:14",
+      "symbol": "H"
+    },
+    {
+      "km": 94.2,
+      "text": "Oschatz",
+      "time": "18:24",
+      "symbol": ""
+    },
+    {
+      "km": 79.5,
+      "text": "Riesa",
+      "time": "18:34",
+      "symbol": "H"
+    },
+    {
+      "km": 68.9,
+      "text": "Weinböhla",
+      "time": "18:43",
+      "symbol": ""
+    },
+    {
+      "km": 57.4,
+      "text": "Großenhain",
+      "time": "18:52",
+      "symbol": ""
+    },
+    {
+      "km": 46.2,
+      "text": "Priestewitz",
+      "time": "19:00",
+      "symbol": ""
+    },
+    {
+      "km": 34.8,
+      "text": "Meißen",
+      "time": "19:09",
+      "symbol": ""
+    },
+    {
+      "km": 25.6,
+      "text": "Coswig",
+      "time": "19:16",
+      "symbol": "H"
+    },
+    {
+      "km": 14,
+      "text": "Radebeul Ost",
+      "time": "19:24",
+      "symbol": ""
+    },
+    {
+      "km": 5.4,
+      "text": "Dresden-Neustadt",
+      "time": "19:31",
+      "symbol": "H"
+    },
+    {
+      "km": 0,
+      "text": "Dresden Hbf",
+      "time": "19:36",
+      "symbol": "H"
+    }
+  ]
+}
