@@ -61,19 +61,59 @@ while (true) {
 
 static async Task<object> ReadTelemetryAsync(HttpClient http) {
     try {
-        var speed = await GetDoubleAsync(http, "/get/CurrentDrivableActor.Function.HUD_GetSpeed");
+        var speedMs = await GetDoubleAsync(http, "/get/CurrentDrivableActor.Function.HUD_GetSpeed");
+        var gradient = await GetNestedDoubleAsync(http, "/get/DriverAid.Data", "gradient");
+        var limitMs = await GetNestedDoubleAsync(http, "/get/DriverAid.Data", "speedLimit", "value");
+        var time = await GetStringAsync(http, "/get/TimeOfDay.data", "LocalTimeISO8601");
+        var lat = await GetNestedDoubleAsync(http, "/get/DriverAid.PlayerInfo", "geoLocation", "latitude");
+        var lon = await GetNestedDoubleAsync(http, "/get/DriverAid.PlayerInfo", "geoLocation", "longitude");
+        var loco = await GetStringAsync(http, "/get/CurrentFormation/0.ObjectClass");
         return new {
             connected = true,
-            speedKmh = speed ?? 0,
-            simulationTime = (string?)null
+            speedKmh = (speedMs ?? 0) * 3.6,
+            speedLimitKmh = (limitMs ?? 0) * 3.6,
+            gradient = gradient ?? 0,
+            simulationTime = time,
+            latitude = lat,
+            longitude = lon,
+            loco = loco ?? ""
         };
     } catch {
         return new {
-            connected = false,
-            speedKmh = 0,
-            simulationTime = (string?)null
+            connected = false, speedKmh = 0, speedLimitKmh = 0, gradient = 0,
+            simulationTime = (string?)null, latitude = (double?)null, longitude = (double?)null, loco = ""
         };
     }
+}
+
+static async Task<string?> GetStringAsync(HttpClient http, string path, params string[] names) {
+    using var r = await http.GetAsync(path);
+    if (!r.IsSuccessStatusCode) return null;
+    var text = await r.Content.ReadAsStringAsync();
+    try {
+        using var doc = JsonDocument.Parse(text);
+        JsonElement e = doc.RootElement;
+        foreach (var name in names) {
+            if (e.TryGetProperty(name, out var p)) e = p; else if (e.TryGetProperty("Values", out var v) && v.TryGetProperty(name, out var q)) e = q; else return null;
+        }
+        return e.ValueKind == JsonValueKind.String ? e.GetString() : null;
+    } catch { return null; }
+}
+
+static async Task<double?> GetNestedDoubleAsync(HttpClient http, string path, params string[] names) {
+    using var r = await http.GetAsync(path);
+    if (!r.IsSuccessStatusCode) return null;
+    var text = await r.Content.ReadAsStringAsync();
+    try {
+        using var doc = JsonDocument.Parse(text);
+        JsonElement e = doc.RootElement;
+        foreach (var name in names) {
+            if (e.TryGetProperty(name, out var p)) e = p;
+            else if (e.TryGetProperty("Values", out var v) && v.TryGetProperty(name, out var q)) e = q;
+            else return null;
+        }
+        return e.ValueKind == JsonValueKind.Number ? e.GetDouble() : null;
+    } catch { return null; }
 }
 
 static async Task<double?> GetDoubleAsync(HttpClient http, string path) {
