@@ -55,6 +55,7 @@ class EbulaApp extends StatefulWidget {
 
 class _EbulaAppState extends State<EbulaApp> {
   Schedule? schedule;
+  String pcHost = '192.168.178.20';
   Telemetry telemetry = const Telemetry();
   Timer? timer;
   StreamSubscription? socketSub;
@@ -67,6 +68,7 @@ class _EbulaAppState extends State<EbulaApp> {
   @override void initState() {
     super.initState();
     _load();
+    _connect();
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!paused && timeMode && telemetry.simulationTime == null && mounted) {
         setState(() => clock = clock.add(const Duration(seconds: 1)));
@@ -76,6 +78,8 @@ class _EbulaAppState extends State<EbulaApp> {
   }
 
   Future<void> _load() async {
+    final prefs = await SharedPreferences.getInstance();
+    pcHost = prefs.getString('pcHost') ?? '192.168.178.20';
     final raw = await rootBundle.loadString('assets/schedules/ice15.json');
     final p = await SharedPreferences.getInstance();
     if (!mounted) return;
@@ -84,6 +88,7 @@ class _EbulaAppState extends State<EbulaApp> {
       night = p.getBool('night') ?? false;
       dark = p.getBool('dark') ?? true;
       brightness = p.getDouble('brightness') ?? 1;
+      pcHost = p.getString('pcHost') ?? pcHost;
     });
   }
 
@@ -92,11 +97,14 @@ class _EbulaAppState extends State<EbulaApp> {
     await p.setBool('night', night);
     await p.setBool('dark', dark);
     await p.setDouble('brightness', brightness);
+    await p.setString('pcHost', pcHost);
   }
 
   void _connect() {
     try {
-      socket = WebSocketChannel.connect(Uri.parse('ws://192.168.0.1:31271/ebula'));
+      socketSub?.cancel();
+      socket?.sink.close();
+      socket = WebSocketChannel.connect(Uri.parse('ws://$pcHost:31271/ebula'));
       socketSub = socket!.stream.listen((data) {
         final j = jsonDecode(data as String);
         if (j['type'] == 'telemetry' && mounted) {
@@ -186,7 +194,7 @@ class _EbulaAppState extends State<EbulaApp> {
           if (l == '7') _adjust(0, -1);
           if (l == '8') setState(() => brightness = (brightness + .1).clamp(.4, 1.0).toDouble());
           if (l == '9') setState(() => brightness = (brightness - .1).clamp(.4, 1.0).toDouble());
-          if (l == '0') _page(1);
+          if (l == '0') _settings();
           _save();
         }),
       )),
@@ -264,6 +272,25 @@ class _EbulaAppState extends State<EbulaApp> {
       style: TextStyle(color: fg, fontSize: 20, fontWeight: FontWeight.w700))));
   Widget _status(String text, Color fg) => Expanded(
     child: Center(child: Text(text, style: TextStyle(color: fg, fontSize: 15, fontWeight: FontWeight.bold))));
+
+  void _settings() {
+    final c = TextEditingController(text: pcHost);
+    showDialog(context: context, builder: (_) => AlertDialog(
+      backgroundColor: Colors.black,
+      title: const Text('TSW6 Verbindung', style: TextStyle(color: Colors.white)),
+      content: TextField(controller: c, style: const TextStyle(color: Colors.white),
+        decoration: const InputDecoration(labelText: 'PC-IP / Hostname', labelStyle: TextStyle(color: Colors.orange))),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text('C')),
+        TextButton(onPressed: () {
+          setState(() => pcHost = c.text.trim());
+          _save();
+          _connect();
+          Navigator.pop(context);
+        }, child: const Text('VERBINDEN')),
+      ],
+    ));
+  }
 
   void _info() {
     showDialog(context: context, builder: (_) => AlertDialog(
